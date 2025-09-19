@@ -2071,10 +2071,9 @@
             const parts = msg.split("|").map(p => p.trim()).filter(Boolean);
 
             try {
-                const res = await fetch("/chat", {
+                const res = await fetch("https://cura-ai.onrender.com/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    // ✅ only send list if there are multiple inputs
                     body: JSON.stringify({ message: parts.length > 1 ? parts : parts[0] })
                 });
                 const data = await res.json();
