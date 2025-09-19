@@ -1,7 +1,8 @@
-Flask
-Flask-Cors
-tensorflow
+flask
+flask-cors
 numpy
 pandas
+tensorflow
+scikit-learn
 joblib
 gunicorn
