@@ -22,7 +22,7 @@ app.secret_key = "supersecretkey"
 from flask_cors import CORS
 
 # Allow requests from anywhere (development)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
 # 🔒 Later in production, restrict only to your frontend domain:
 # CORS(app, resources={r"/*": {"origins": "https://your-frontend-domain.com"}})
