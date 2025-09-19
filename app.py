@@ -19,7 +19,14 @@ MAPPING_CSV = os.path.join(BASE_DIR, "disease_doctor_mapping.csv")
 # ------------ FLASK APP ------------
 app = Flask(__name__, static_folder="static", template_folder="templates")
 app.secret_key = "supersecretkey"
-CORS(app)
+from flask_cors import CORS
+
+# Allow requests from anywhere (development)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+# 🔒 Later in production, restrict only to your frontend domain:
+# CORS(app, resources={r"/*": {"origins": "https://your-frontend-domain.com"}})
+
 
 # ------------ LOAD MODEL & DATA ------------
 model = tf.keras.models.load_model(MODEL_PATH)
