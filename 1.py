@@ -4,12 +4,19 @@ from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
 from tensorflow import keras
 import joblib
+import os
 
 # -------------------------
 # 1. Load Train & Test Datasets
 # -------------------------
-train_path = r"C:\yash\coding\python\college\disease prediction model\archive\Training_disease_prediction.csv"
-test_path = r"C:\yash\coding\python\college\disease prediction model\archive\Testing_disease_prediction.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+archive_dir = os.path.join(BASE_DIR, "archive")
+
+print(BASE_DIR)
+print(archive_dir)
+
+train_path = os.path.join(archive_dir, "Training_disease_prediction.csv")
+test_path = os.path.join(archive_dir, "Testing_disease_prediction.csv")
 
 train_data = pd.read_csv(train_path)
 test_data = pd.read_csv(test_path)
@@ -91,15 +98,16 @@ print("Actual Disease:", label_encoder.inverse_transform([y_test[0]]))
 # -------------------------
 # 9. Save Model & Encoder
 # -------------------------
-import os
 
-BASE_DIR = r"C:\yash\coding\python\college\disease prediction model"
+MODEL_DIR = os.path.join(BASE_DIR, "models")
+os.makedirs(MODEL_DIR, exist_ok=True)
 
-MODEL_PATH = os.path.join(BASE_DIR, "disease_model.h5")
-ENCODER_PATH = os.path.join(BASE_DIR, "label_encoder.pkl")
+MODEL_PATH = os.path.join(MODEL_DIR, "disease_model.h5")
+ENCODER_PATH = os.path.join(MODEL_DIR, "label_encoder.pkl")
 
 model.save(MODEL_PATH)
 joblib.dump(label_encoder, ENCODER_PATH)
+
 print(f"💾 Model saved at {MODEL_PATH}")
 print(f"💾 Encoder saved at {ENCODER_PATH}")
 
