@@ -3,7 +3,7 @@ import pandas as pd
 from utils_data import load_and_clean, generate_doctor_mapping
 import os
 
-BASE_DIR = r"C:\yash\coding\python\college\disease prediction model"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUT_CSV = os.path.join(BASE_DIR, "disease_doctor_mapping.csv")
 
 train_df, _ = load_and_clean()

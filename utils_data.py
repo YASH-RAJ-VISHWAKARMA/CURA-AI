@@ -2,7 +2,7 @@
 import pandas as pd
 import os
 
-BASE_DIR = r"C:\yash\coding\python\college\disease prediction model"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TRAIN_CSV = os.path.join(BASE_DIR, "archive", "Training_disease_prediction.csv")
 TEST_CSV  = os.path.join(BASE_DIR, "archive", "Testing_disease_prediction.csv")
 
