@@ -11,7 +11,7 @@ const TOKEN = "YOUR_ACCESS_TOKEN";
 
 // send message via WhatsApp Cloud API
 // 
-async function sendMessage(){
+async function sendMessage() {
   const selected = $('#symptomSelect').val(); // array of symptoms
 
   if (!selected || selected.length === 0) {
@@ -20,28 +20,55 @@ async function sendMessage(){
   }
 
   // Show user’s selection as bubble
-  addUserBubble(selected.map(s => s.replace(/_/g,' ')).join(', '));
+  addUserBubble(selected.map(s => s.replace(/_/g, ' ')).join(', '));
 
   // Clear selection
   $('#symptomSelect').val(null).trigger('change');
 
   try {
-    const res = await fetch("/chat", {
+    // 🔽 Auto-select backend URL
+    const backendURL =
+      window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+        ? "http://127.0.0.1:5000/chat"        // Local Flask
+        : "https://cura-ai.onrender.com/chat"; // Render deployed
+
+    // ✅ Send selected symptoms directly as array
+    const res = await fetch(backendURL, {
       method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({message: selected})   // send as array, not just string
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: selected })
     });
 
     const data = await res.json();
+
     if (data.error) {
       addBotBubble("⚠ " + data.error);
-    } else {
+    } else if (data.results) {
       let html = "<b>Top predictions:</b><br>";
       data.results.forEach(r => {
-        html += `• <b>${r.disease}</b> — ${r.confidence.toFixed(2)}% (<i>${r.doctor}</i>)<br>`;
+        html += `• <b>${r.disease}</b> — ${parseFloat(r.confidence).toFixed(2)}% (<i>${r.doctor}</i>)<br>`;
       });
       addBotBubble(html);
-      speak(html);
+
+      if (typeof speak === "function") {
+        speak(html);
+      }
+    } else if (data.responses) {
+      // If backend sends multiple responses
+      data.responses.forEach(resp => {
+        if (resp.error) {
+          addBotBubble("⚠ " + resp.error);
+        } else {
+          let html = "<b>Top predictions:</b><br>";
+          resp.results.forEach(r => {
+            html += `• <b>${r.disease}</b> — ${parseFloat(r.confidence).toFixed(2)}% (<i>${r.doctor}</i>)<br>`;
+          });
+          addBotBubble(html);
+        }
+      });
+    } else {
+      addBotBubble("⚠ Unexpected response format.");
+      console.log("Response:", data);
     }
   } catch (e) {
     addBotBubble("⚠ Error connecting to server.");
