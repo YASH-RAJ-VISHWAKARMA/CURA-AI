@@ -84,6 +84,83 @@ def logout():
     session.pop("user", None)
     return jsonify({"success": True, "message": "Logged out"})
 
+# @app.route("/chat", methods=["POST"])
+# def chat():
+#     data = request.get_json(force=True)
+#     raw = data.get("message", "")
+
+#     if isinstance(raw, str):
+#         raw_inputs = [raw]
+#     elif isinstance(raw, list):
+#         raw_inputs = raw
+#     else:
+#         return jsonify({"error": "Invalid input format"}), 400
+
+#     responses = []
+#     for entry in raw_inputs:
+#         # 🔽 Normalize: lowercase + replace spaces with underscores
+#         user_symptoms = [
+#             s.strip().lower().replace(" ", "_")
+#             for s in entry.split(",")
+#             if s.strip()
+#         ]
+
+#         if not user_symptoms:
+#             responses.append({"input": entry, "error": "No symptoms provided"})
+#             continue
+
+#         # 🔽 Match against lowercase version of symptom_columns
+#         valid_symptoms = [s for s in user_symptoms if s in symptom_columns]
+
+#         if not valid_symptoms:
+#             responses.append({"input": entry, "error": "No valid symptoms recognized"})
+#             continue
+
+#         results = predict_disease_from_symptoms(valid_symptoms)
+#         responses.append({"input": entry, "results": results})
+
+#     if len(responses) == 1:
+#         return jsonify(responses[0])
+#     return jsonify({"responses": responses})
+
+
+# @app.route("/chat", methods=["POST"])
+# def chat():
+#     data = request.get_json(force=True)
+#     raw = data.get("message", "")
+
+#     if isinstance(raw, str):
+#         raw_inputs = [raw]
+#     elif isinstance(raw, list):
+#         raw_inputs = raw
+#     else:
+#         return jsonify({"error": "Invalid input format"}), 400
+
+#     responses = []
+#     for entry in raw_inputs:
+#         user_symptoms = [s.strip().replace(" ", "_") for s in entry.split(",") if s.strip()]
+
+#         if not user_symptoms:
+#             responses.append({"input": entry, "error": "No symptoms provided"})
+#             continue
+
+#         valid_symptoms = [s for s in user_symptoms if s in symptom_columns]
+
+#         if not valid_symptoms:
+#             responses.append({"input": entry, "error": "No valid symptoms recognized"})
+#             continue
+
+#         results = predict_disease_from_symptoms(valid_symptoms)
+#         responses.append({"input": entry, "results": results})
+
+#     if len(responses) == 1:
+#         return jsonify(responses[0])
+#     return jsonify({"responses": responses})
+
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
+
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json(force=True)
@@ -117,5 +194,5 @@ def chat():
         return jsonify(responses[0])
     return jsonify({"responses": responses})
 
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
